@@ -19,12 +19,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Download Gradle 8.5 & Build APK
+    - name: Accept Android SDK Licenses
       run: |
-        wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
-        unzip -q gradle-8.5-bin.zip -d /opt/
-        export PATH="/opt/gradle-8.5/bin:$PATH"
-        gradle assembleDebug --stacktrace
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.5'
+
+    - name: Generate Wrapper & Build Debug APK
+      run: |
+        gradle wrapper --gradle-version 8.5
+        chmod +x gradlew
+        ./gradlew assembleDebug --no-daemon --stacktrace
 
     - name: Upload APK
       if: always()
