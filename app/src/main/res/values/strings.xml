@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vigor Shield</string>
+    <string name="accessibility_desc">Provides automated reel filtering and guardian tamper protection.</string>
+</resources>
