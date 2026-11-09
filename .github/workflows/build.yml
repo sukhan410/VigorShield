@@ -19,14 +19,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Setup Android SDK Environment
+      run: |
+        echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+
     - name: Install Gradle & Build APK
       run: |
-        curl -s "https://get.sdkman.io" | bash
-        source "$HOME/.sdkman/bin/sdkman-init.sh"
-        sdk install gradle 8.5
-        gradle assembleDebug --stacktrace
+        sudo apt-get update -qq
+        sudo apt-get install -y gradle
+        gradle wrapper --gradle-version 8.5
+        chmod +x gradlew
+        ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: VigorShield-Debug-APK
