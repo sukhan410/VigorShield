@@ -19,17 +19,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK Environment
+    - name: Download Gradle 8.5 & Build APK
       run: |
-        echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-
-    - name: Install Gradle & Build APK
-      run: |
-        sudo apt-get update -qq
-        sudo apt-get install -y gradle
-        gradle wrapper --gradle-version 8.5
-        chmod +x gradlew
-        ./gradlew assembleDebug --stacktrace
+        wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
+        unzip -q gradle-8.5-bin.zip -d /opt/
+        export PATH="/opt/gradle-8.5/bin:$PATH"
+        gradle assembleDebug --stacktrace
 
     - name: Upload APK
       if: always()
